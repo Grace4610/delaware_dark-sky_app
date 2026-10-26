@@ -5,7 +5,7 @@
 */
 function switchPage(targetPageId) {
    const allPages = ['home-page', 'map-page', 'edu-page'];
-
+  
    for (let i = 0; i < allPages.length; i++) {
        const currentPageId = allPages[i];
        const pageElement = document.getElementById(currentPageId);
@@ -13,11 +13,11 @@ function switchPage(targetPageId) {
            pageElement.classList.add('hidden-page');
        }
    }
-
+  
    const targetElement = document.getElementById(targetPageId);
    if (targetElement) {
        targetElement.classList.remove('hidden-page');
-
+      
        // updates upon panel switch
        if (targetPageId === 'map-page' && map) {
            setTimeout(function() {
@@ -27,97 +27,95 @@ function switchPage(targetPageId) {
    }
 }
 
-// map initialization
+
+// map initializaton
 // Center map view panel over Dover, Delaware [39.1582, -75.5244]
 const map = L.map('map').setView([39.1582, -75.5244], 9);
+
 
 // Pull base map from OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors',
   maxZoom: 19
 }).addTo(map);
-
 // Overlay a pre-existing satellite light pollution color ramp on top of our map
-L.tileLayer('https://waqi.info{z}/{x}/{y}.png', {
+L.tileLayer('https://waqi.info/{z}/{x}/{y}.png', {
   attribution: 'Satellite Data &copy; WAQI',
-  opacity: 0.5
+  opacity: 0.5 // Makes the layer semi-transparent so you can still read the street names!
 }).addTo(map);
+
 
 // initiates a tracking array layer to clear old flags on fresh searches
 let mapMarkersLayer = L.layerGroup().addTo(map);
+
+
+
 
 // PROCESS GEOSPATIAL DATA
 async function processGeospatialData() {
    const addressInput = document.getElementById('user-address').value;
    const maxRadius = parseFloat(document.getElementById('travel-radius').value);
 
+
    if (addressInput.trim() === "") {
        alert("Please enter a valid Delaware address or ZIP code to begin calculations.");
        return;
    }
 
-   if (isNaN(maxRadius) || maxRadius <= 0) {
-       alert("Please enter a valid travel radius greater than zero.");
-       return;
-   }
 
    // Reset any old coordinate flags sitting on the map canvas
    mapMarkersLayer.clearLayers();
 
+
    try {
        // STEP 1: ASYNCHRONOUS NETWORK GEOLOCATION FETCH
-       const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
-
-       const response = await fetch(geocodeUrl);
-
-       if (!response.ok) {
-           throw new Error(`Geocoding request failed: ${response.status}`);
-       }
-
+       const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
+       const response = await fetch(geocodeUrl, {
+           headers: {
+               'User-Agent': 'DelawareDarkSkyPlatform/1.0 (grace4610@github.io; educational student project)'
+           }
+       });
        const data = await response.json();
+
 
        if (data.length === 0) {
            alert("Unable to process location. Please check your address or ZIP code for spelling errors.");
            return;
        }
 
+
+       // Extract the user's home coordinate float tokens out of index zero of the data array
        const userLat = parseFloat(data[0].lat);
        const userLng = parseFloat(data[0].lon);
+
 
        // center map over users location
        map.setView([userLat, userLng], 11);
        L.marker([userLat, userLng]).addTo(mapMarkersLayer).bindPopup("<b>Your Location Vector</b>").openPopup();
 
+
        // STEP 2: STREAM LOCAL JSON
+       // Pulls state coordinates from data base
        const databaseResponse = await fetch('delaware-light-data.json');
-
-       if (!databaseResponse.ok) {
-           throw new Error(`Could not load delaware-light-data.json: ${databaseResponse.status}`);
-       }
-
        const darkSkyDatabase = await databaseResponse.json();
+
 
        // Creates an empty array list container to store matching park options
        let eligibleSites = [];
 
+
        // STEP 3: SCANNING ENGINE LOOP
        for (const zipKey in darkSkyDatabase) {
            const cityNode = darkSkyDatabase[zipKey];
-
-           if (!cityNode.vettedDarkSites) {
-               continue;
-           }
-
+          
+           // scans 'vettedDarkSites' array elements
            for (let i = 0; i < cityNode.vettedDarkSites.length; i++) {
                const site = cityNode.vettedDarkSites[i];
-
-               const distanceMiles = calculateHaversineDistance(
-                   userLat,
-                   userLng,
-                   site.latitude,
-                   site.longitude
-               );
-
+              
+               // Pass latitude and longitude coordinate floats to the Haversine trigonometry formula for precise distance
+               const distanceMiles = calculateHaversineDistance(userLat, userLng, site.latitude, site.longitude);
+              
+               // Array filtering, checks if the computed distance sits within radious
                if (distanceMiles <= maxRadius) {
                    site.computedDistance = distanceMiles;
                    eligibleSites.push(site);
@@ -125,85 +123,32 @@ async function processGeospatialData() {
            }
        }
 
+
+       // if a user enters a radius which doesn't contain any safe night sky veiwing options
        if (eligibleSites.length === 0) {
            alert(`No dark-sky conservation tracts detected within a ${maxRadius}-mile radius. Widen your travel boundary parameters.`);
            return;
        }
 
+
        // STEP 4: SORT ARRAY FILTER
+       // Ranks filtered locations by comparing lowest Bortle score (darkest) to highest
        eligibleSites.sort((a, b) => a.bortleScore - b.bortleScore);
-
+      
+       // Index zero holds the absolute darkest location within the user's travel radius
        const optimalSite = eligibleSites[0];
-
+      
        console.log(`Best match: ${optimalSite.siteName} located ${optimalSite.computedDistance.toFixed(1)} miles away.`);
 
-       // SATELLITE WEATHER INTEGRATION
-       const resultsPanel = document.getElementById('results-panel');
-       const resultsContent = document.getElementById('results-content');
-
-       if (resultsPanel && resultsContent) {
-           resultsPanel.style.display = "block";
-           resultsContent.innerHTML = "Fetching current weather...";
-
-           try {
-               const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${optimalSite.latitude}&longitude=${optimalSite.longitude}&current=cloud_cover,wind_speed_10m`;
-
-               const weatherResponse = await fetch(weatherUrl);
-
-               if (!weatherResponse.ok) {
-                   throw new Error(`Weather request failed: ${weatherResponse.status}`);
-               }
-
-               const weatherData = await weatherResponse.json();
-
-               if (!weatherData.current ||
-                   weatherData.current.cloud_cover == null ||
-                   weatherData.current.wind_speed_10m == null) {
-                   throw new Error("Current weather data is unavailable.");
-               }
-
-               const currentCloudCover = weatherData.current.cloud_cover;
-               const liveWind = weatherData.current.wind_speed_10m;
-
-               let visibilityStatus = "";
-
-               if (currentCloudCover < 20) {
-                   visibilityStatus = "Clear skies, perfect stargazing conditions.";
-               } else if (currentCloudCover < 60) {
-                   visibilityStatus = "Partially cloudy, stars should be mostly visible.";
-               } else {
-                   visibilityStatus = "Very cloudy, may not be able to see stars.";
-               }
-
-               resultsContent.innerHTML = `
-                   <b>Absolute Darkest Target Found:</b> ${optimalSite.siteName}<br>
-                   <b>Distance Vector:</b> ${optimalSite.computedDistance.toFixed(1)} Miles away from your location.<br>
-                   <b>Light Pollution Index:</b> Bortle Class ${optimalSite.bortleScore}<br>
-                   <b>Civic STEM Access:</b> ${optimalSite.isDarkSkyClassroom ? "Vetted Dark-Sky Classroom" : "General Park Area"}<br>
-                   <b>Live Atmospheric Cloud Cover:</b> ${currentCloudCover}% (${visibilityStatus})<br>
-                   <b>Current Surface Windspeed:</b> ${liveWind} km/h<br>
-                   <b>Critical Ecological Profile:</b> ${optimalSite.ecoSystemNotes}
-               `;
-           } catch (weatherError) {
-               console.error("Weather error:", weatherError);
-
-               resultsContent.innerHTML = `
-                   <b>Dark-Sky Target Found:</b> ${optimalSite.siteName}<br>
-                   <b>Distance:</b> ${optimalSite.computedDistance.toFixed(1)} miles<br>
-                   <b>Light Pollution Index:</b> Bortle Class ${optimalSite.bortleScore}<br>
-                   <b>Weather:</b> Weather data is temporarily unavailable. Please try again.
-               `;
-           }
-       } else {
-           console.error('Weather results could not be displayed. Check that results-panel and results-content exist in your HTML.');
-       }
 
        // STEP 5: RENDERING OPTIMIZED COORDINATE FLAGS
+       // Loops through all eligible locations to draw data circle vectors onto the map
        eligibleSites.forEach(site => {
            const isOptimal = (site.siteName === optimalSite.siteName);
-
+          
+           // Highlight the optimal target in stellar sky-blue; other secondary sites render in muted white
            const circleColor = isOptimal ? '#b231e1' : '#9a919a';
-
+          
            const siteMarker = L.circleMarker([site.latitude, site.longitude], {
                radius: isOptimal ? 12 : 8,
                fillColor: circleColor,
@@ -212,39 +157,45 @@ async function processGeospatialData() {
                fillOpacity: 0.9
            }).addTo(mapMarkersLayer);
 
+
+           // fill popup with info on the location
            siteMarker.bindPopup(`
                <b style="color:#38bdf8;">${site.siteName}</b><br>
                <b>Darkness Index:</b> Bortle Class ${site.bortleScore}<br>
                <b>Distance:</b> ${site.computedDistance.toFixed(1)} Miles away.<br>
                <b>Eco Report:</b> ${site.ecoSystemNotes}
            `);
-
+          
            if (isOptimal) {
                siteMarker.openPopup();
            }
        });
 
+
    } catch (error) {
-       console.error("Calculation error:", error);
-       alert("Calculation error: " + error.message);
+       console.error("error", error);
+       alert("Calculation error. Unable to process data.");
    }
 }
 
+
 /**
-* THE HAVERSINE SPATIAL DISTANCE MATRIX FORMULA
+* THE HAVERSINE SPATIAL DISTANCE MATRIX FORMULA <3
 * Calculates precise surface miles across Earth using radian geometry.
 */
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-   const earthRadiusMiles = 3958.8;
-
+   const earthRadiusMiles = 3958.8; // Static planetary calculation constant
+  
+   // Converts coordinate floating-point entries into native spatial radians
    const dLat = (lat2 - lat1) * Math.PI / 180;
    const dLon = (lon2 - lon1) * Math.PI / 180;
-
+  
+   // Core trigonometry cross-multiplication mapping vectors across a curved axes(earth)
    const a =
        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
+      
    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-   return earthRadiusMiles * c;
+   return earthRadiusMiles * c; // Outputs precise float distance values
 }
