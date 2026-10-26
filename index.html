@@ -68,7 +68,10 @@
      
       <!-- consistent navigation bar -->
       <nav>
-          <div class="nav-logo">Delaware Dark Sky</div>
+          <div class="nav-logo" style="display: flex; align-items: center; gap: 12px;">
+          <span>Delaware Dark Sky</span>
+          <img src="logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; border-radius: 4px;">
+          </nav>
           <div class="nav-links">
               <button onclick="switchPage('home-page')">Home</button>
               <button onclick="switchPage('map-page')">Map</button>
@@ -79,9 +82,32 @@
 
       <!-- home page -->
       <div id="home-page" class="page-container">
-          <h1>Welcome to Delaware Dark Sky!</h1>
-          <p>Appreciate our dark skies and help raise awareness for preventing light pollution in our communities.</p>
-      </div>
+         <div style="text-align: center; margin-bottom: 40px; padding: 30px; background-color: #111827; border-radius: 8px; border: 1px solid #1f2937;">
+              <h1 style="margin-top: 0; color: #8104ae;">Welcome to Delaware Dark Sky</h1>
+              <p style="color: #9ca3af; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                  An interactive civic technology platform engineered to track light pollution footprints, optimize observation routes, and advocate for dark-sky preservation across Delaware communities.
+              </p>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+              <!-- Platform Purpose Card Layout -->
+              <div style="flex: 1; min-width: 300px; background-color: #111827; padding: 25px; border-radius: 8px; border: 1px solid #1f2937;">
+                  <h3 style="color: #8104ae; margin-top: 0;">What This App Does</h3>
+                  <p style="line-height: 1.6; color: #e5e7eb; font-size: 0.95rem;">
+                      This application converts complex spatial coordination files into a simplified interface. By entering your location parameters, the engine automatically calculates coordinates, sorts regional public lands, and isolates the darkest observational locations within your chosen travel boundaries.
+                  </p>
+              </div>
+
+              <!-- Inspiration Card Layout -->
+              <div style="flex: 1; min-width: 300px; background-color: #111827; padding: 25px; border-radius: 8px; border: 1px solid #1f2937;">
+                  <h3 style="color: #8104ae; margin-top: 0;">Our Inspiration</h3>
+                  <p style="line-height: 1.6; color: #e5e7eb; font-size: 0.95rem;">
+                      Living along Delaware's expanding coastal and suburban regions makes artificial skyglow highly visible. This project was directly inspired by the need to protect our natural overhead environments, ensure urban school groups retain access to observational astronomy, and protect sensitive nocturnal ecosystems.
+                  </p>
+              </div>
+          </div>
+
+
 
 
       <!-- light pollution map page -->
