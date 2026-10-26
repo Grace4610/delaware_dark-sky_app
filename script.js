@@ -30,10 +30,15 @@ function switchPage(targetPageId) {
 // Center map view panel over Dover, Delaware [39.1582, -75.5244]
 const map = L.map('map').setView([39.1582, -75.5244], 9);
 
-// Pull base map from the CARTO servers
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    maxZoom: 20
+// Pull base map from OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+   attribution: '&copy; OpenStreetMap contributors',
+   maxZoom: 19
+}).addTo(map);
+// Overlay a pre-existing satellite light pollution color ramp on top of our map
+L.tileLayer('https://waqi.info{z}/{x}/{y}.png', {
+   attribution: 'Satellite Data &copy; WAQI',
+   opacity: 0.5 // Makes the layer semi-transparent so you can still read the street names!
 }).addTo(map);
 
 // initiates a tracking array layer to clear old flags on fresh searches
