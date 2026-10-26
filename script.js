@@ -124,7 +124,7 @@ async function processGeospatialData() {
            resultsPanel.style.display = "block";
            resultsContent.innerHTML = "Fetching meteorological satellite arrays... Compiling atmospheric matrices...";
            
-           const weatherUrl = `https://open-meteo.com{optimalSite.latitude}&longitude=${optimalSite.longitude}&current_weather=true&hourly=cloudcover`;
+           const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${optimalSite.latitude}&longitude=${optimalSite.longitude}&current_weather=true&hourly=cloudcover`;
            const weatherResponse = await fetch(weatherUrl);
            const weatherData = await weatherResponse.json();
            
