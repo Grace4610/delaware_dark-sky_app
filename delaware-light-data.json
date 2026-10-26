@@ -1,0 +1,274 @@
+ {
+  "19711": {
+    "cityName": "Newark",
+    "centerLatitude": 39.6837,
+    "centerLongitude": -75.7497,
+    "vettedDarkSites": [
+      {
+        "siteName": "White Clay Creek State Park",
+        "bortleScore": 5.8,
+        "latitude": 39.7126,
+        "longitude": -75.7512,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Monitors urban glare creep affecting Piedmont stream valley wildlife. Excellent local resource for northern Delaware school districts."
+      }
+    ]
+  },
+  "19807": {
+    "cityName": "Wilmington (Greenville)",
+    "centerLatitude": 39.7801,
+    "centerLongitude": -75.6022,
+    "vettedDarkSites": [
+      {
+        "siteName": "Brandywine Creek State Park",
+        "bortleScore": 6.2,
+        "latitude": 39.8093,
+        "longitude": -75.5614,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Provides critical baseline tracking data for metropolitan skyglow. Serves as an open urban marsh habitat preserve."
+      }
+    ]
+  },
+  "19709": {
+    "cityName": "Middletown",
+    "centerLatitude": 39.4496,
+    "centerLongitude": -75.7163,
+    "vettedDarkSites": [
+      {
+        "siteName": "Augustine Wildlife Area",
+        "bortleScore": 4.8,
+        "latitude": 39.4231,
+        "longitude": -75.5894,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Directly borders the Delaware River. Artificial glare audits preserve foraging rhythms for sensitive nocturnal marsh raptors."
+      }
+    ]
+  },
+  "19734": {
+    "cityName": "Smyrna",
+    "centerLatitude": 39.2998,
+    "centerLongitude": -75.6046,
+    "vettedDarkSites": [
+      {
+        "siteName": "Blackbird State Forest",
+        "bortleScore": 4.5,
+        "latitude": 39.3662,
+        "longitude": -75.6421,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "One of the darkest inland canopies in northern Kent County. Crucial educational preserve for dense forest ecology observations."
+      }
+    ]
+  },
+  "19901": {
+    "cityName": "Dover",
+    "centerLatitude": 39.1582,
+    "centerLongitude": -75.5244,
+    "vettedDarkSites": [
+      {
+        "siteName": "Little Creek Wildlife Area",
+        "bortleScore": 5.2,
+        "latitude": 39.1678,
+        "longitude": -75.4322,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Ecosystem barrier balancing capital city infrastructure lights against sensitive coastal nesting corridors."
+      }
+    ]
+  },
+  "19962": {
+    "cityName": "Magnolia",
+    "centerLatitude": 39.0712,
+    "centerLongitude": -75.4766,
+    "vettedDarkSites": [
+      {
+        "siteName": "John Dickinson Plantation Grounds",
+        "bortleScore": 4.6,
+        "latitude": 39.1025,
+        "longitude": -75.4384,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Historic preserve offering unobstructed horizon visibility. Excellent site for community starlight mapping and pollution tracing."
+      }
+    ]
+  },
+  "19943": {
+    "cityName": "Felton",
+    "centerLatitude": 39.0112,
+    "centerLongitude": -75.5783,
+    "vettedDarkSites": [
+      {
+        "siteName": "Killens Pond State Park",
+        "bortleScore": 4.3,
+        "latitude": 38.9876,
+        "longitude": -75.5492,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Central freshwater ecosystem. Shielded downward public fixtures minimize light reflection disruptions over aquatic species."
+      }
+    ]
+  },
+  "19954": {
+    "cityName": "Harrington",
+    "centerLatitude": 38.9246,
+    "centerLongitude": -75.5722,
+    "vettedDarkSites": [
+      {
+        "siteName": "Browns Branch County Park",
+        "bortleScore": 4.4,
+        "latitude": 38.9412,
+        "longitude": -75.5034,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Protects a rare forested floodplain wetland corridor. High priority area for monitoring agricultural lighting creep."
+      }
+    ]
+  },
+  "19963": {
+    "cityName": "Milford",
+    "centerLatitude": 38.9123,
+    "centerLongitude": -75.4289,
+    "vettedDarkSites": [
+      {
+        "siteName": "Abbott's Mill Nature Center",
+        "bortleScore": 4.5,
+        "latitude": 38.8976,
+        "longitude": -75.4612,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Combines historic mill ponds with native meadow trails. Operates active local public outreach modules for night-sky preservation."
+      }
+    ]
+  },
+  "19968": {
+    "cityName": "Milton",
+    "centerLatitude": 38.7779,
+    "centerLongitude": -75.3101,
+    "vettedDarkSites": [
+      {
+        "siteName": "Prime Hook National Wildlife Refuge",
+        "bortleScore": 3.9,
+        "latitude": 38.8375,
+        "longitude": -75.2444,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Critical stopover along the Atlantic Flyway. Total darkness protection preserves stellar orientation navigation for millions of migratory birds."
+      }
+    ]
+  },
+  "19958": {
+    "cityName": "Lewes",
+    "centerLatitude": 38.7746,
+    "centerLongitude": -75.1393,
+    "vettedDarkSites": [
+      {
+        "siteName": "Cape Henlopen State Park",
+        "bortleScore": 4.0,
+        "latitude": 38.7793,
+        "longitude": -75.0934,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Vibrant coastal salt marsh habitat. Dark-sky preservation prevents disorientation of migratory avian paths along the Atlantic coastline."
+      }
+    ]
+  },
+  "19971": {
+    "cityName": "Rehoboth Beach",
+    "centerLatitude": 38.7168,
+    "centerLongitude": -75.0827,
+    "vettedDarkSites": [
+      {
+        "siteName": "Delaware Seashore State Park (Tower Road)",
+        "bortleScore": 4.1,
+        "latitude": 38.6312,
+        "longitude": -75.0645,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Protects fragile maritime dune ecosystems. Restricts artificial boardwalk glare to preserve natural sea turtle and shorebird nesting cycles."
+      }
+    ]
+  },
+  "19930": {
+    "cityName": "Bethany Beach",
+    "centerLatitude": 38.5396,
+    "centerLongitude": -75.0552,
+    "vettedDarkSites": [
+      {
+        "siteName": "Fenwick Island State Park (Northern Access)",
+        "bortleScore": 4.1,
+        "latitude": 38.4834,
+        "longitude": -75.0531,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Isolated narrow barrier beach layout. Crucial strip for capturing oceanic dark sky data blocks away from regional resort light domes."
+      }
+    ]
+  },
+  "19966": {
+    "cityName": "Millsboro",
+    "centerLatitude": 38.5912,
+    "centerLongitude": -75.2913,
+    "vettedDarkSites": [
+      {
+        "siteName": "Holts Landing State Park",
+        "bortleScore": 4.2,
+        "latitude": 38.5756,
+        "longitude": -75.1321,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Sits directly on the Indian River Bay marshlands. Low horizontal ambient light glare offers fantastic conditions for marine-science field studies."
+      }
+    ]
+  },
+  "19947": {
+    "cityName": "Georgetown",
+    "centerLatitude": 38.6912,
+    "centerLongitude": -75.3864,
+    "vettedDarkSites": [
+      {
+        "siteName": "Redden State Forest (Headquarters Track)",
+        "bortleScore": 4.3,
+        "latitude": 38.7412,
+        "longitude": -75.4215,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Delaware's largest state forest system. Vetted pine canopies offer dense buffer blocks protecting internal research loops from highway glare."
+      }
+    ]
+  },
+  "19973": {
+    "cityName": "Seaford",
+    "centerLatitude": 38.6411,
+    "centerLongitude": -75.6112,
+    "vettedDarkSites": [
+      {
+        "siteName": "Barnes Woods Nature Preserve",
+        "bortleScore": 4.5,
+        "latitude": 38.6534,
+        "longitude": -75.5512,
+        "isDarkSkyClassroom": false,
+        "ecoSystemNotes": "Preserves a mature upland oak-pine forest ecosystem. Important matrix site for tracking inland city glow effects."
+      }
+    ]
+  },
+  "19975": {
+    "cityName": "Selbyville",
+    "centerLatitude": 38.4593,
+    "centerLongitude": -75.2212,
+    "vettedDarkSites": [
+      {
+        "siteName": "Great Cypress Swamp (Assawoman Wildlife Tract)",
+        "bortleScore": 3.8,
+        "latitude": 38.4412,
+        "longitude": -75.2987,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "The single darkest terrestrial forest footprint in southern Delaware. High-value data tracking point for checking rare nocturnal reptile and amphibian behaviors."
+      }
+    ]
+  },
+  "19956": {
+    "cityName": "Laurel",
+    "centerLatitude": 38.5554,
+    "centerLongitude": -75.5714,
+    "vettedDarkSites": [
+      {
+        "siteName": "Trap Pond State Park",
+        "bortleScore": 4.0,
+        "latitude": 38.5231,
+        "longitude": -75.4746,
+        "isDarkSkyClassroom": true,
+        "ecoSystemNotes": "Home to the northernmost natural stand of bald cypress trees in America. Essential environmental audit checkpoint for dark-sky ecotourism."
+      }
+    ]
+  }
+}
+
+ 
