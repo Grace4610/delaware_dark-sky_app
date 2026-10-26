@@ -69,8 +69,8 @@ async function processGeospatialData() {
         }
 
         // Extract the user's home coordinate float tokens out of index zero of the data array
-        const userLat = parseFloat(data[0].lat);
-        const userLng = parseFloat(data[0].lon);
+        const userLat = parseFloat(data.lat);
+        const userLng = parseFloat(data.lon);
 
         // center map over users location
         map.setView([userLat, userLng], 11);
