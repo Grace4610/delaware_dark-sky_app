@@ -129,7 +129,7 @@ async function processGeospatialData() {
             const isOptimal = (site.siteName === optimalSite.siteName);
             
             // Highlight the optimal target in stellar sky-blue; other secondary sites render in muted white
-            const circleColor = isOptimal ? '#6315ff' : '#a4a4a4';
+            const circleColor = isOptimal ? '#b231e1' : '#9a919a';
             
             const siteMarker = L.circleMarker([site.latitude, site.longitude], {
                 radius: isOptimal ? 12 : 8,
