@@ -1,10 +1,11 @@
+
 /**
 * SINGLE PAGE APPLICATION ROUTER
 * Swaps container visibility to transition pages without reloads.
 */
 function switchPage(targetPageId) {
    const allPages = ['home-page', 'map-page', 'edu-page'];
-  
+
    for (let i = 0; i < allPages.length; i++) {
        const currentPageId = allPages[i];
        const pageElement = document.getElementById(currentPageId);
@@ -12,11 +13,11 @@ function switchPage(targetPageId) {
            pageElement.classList.add('hidden-page');
        }
    }
-  
+
    const targetElement = document.getElementById(targetPageId);
    if (targetElement) {
        targetElement.classList.remove('hidden-page');
-      
+
        // updates upon panel switch
        if (targetPageId === 'map-page' && map) {
            setTimeout(function() {
@@ -26,7 +27,7 @@ function switchPage(targetPageId) {
    }
 }
 
-// map initializaton
+// map initialization
 // Center map view panel over Dover, Delaware [39.1582, -75.5244]
 const map = L.map('map').setView([39.1582, -75.5244], 9);
 
@@ -55,18 +56,24 @@ async function processGeospatialData() {
        return;
    }
 
+   if (isNaN(maxRadius) || maxRadius <= 0) {
+       alert("Please enter a valid travel radius greater than zero.");
+       return;
+   }
+
    // Reset any old coordinate flags sitting on the map canvas
    mapMarkersLayer.clearLayers();
 
    try {
        // STEP 1: ASYNCHRONOUS NETWORK GEOLOCATION FETCH
-       const geocodeUrl = `https://openstreetmap.org{encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
-       
-       const response = await fetch(geocodeUrl, {
-           headers: {
-               'User-Agent': 'DelawareDarkSkyPlatform/1.0 (grace4610@github.io; educational student project)'
-           }
-       });
+       const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
+
+       const response = await fetch(geocodeUrl);
+
+       if (!response.ok) {
+           throw new Error(`Geocoding request failed: ${response.status}`);
+       }
+
        const data = await response.json();
 
        if (data.length === 0) {
@@ -83,6 +90,11 @@ async function processGeospatialData() {
 
        // STEP 2: STREAM LOCAL JSON
        const databaseResponse = await fetch('delaware-light-data.json');
+
+       if (!databaseResponse.ok) {
+           throw new Error(`Could not load delaware-light-data.json: ${databaseResponse.status}`);
+       }
+
        const darkSkyDatabase = await databaseResponse.json();
 
        // Creates an empty array list container to store matching park options
@@ -91,12 +103,21 @@ async function processGeospatialData() {
        // STEP 3: SCANNING ENGINE LOOP
        for (const zipKey in darkSkyDatabase) {
            const cityNode = darkSkyDatabase[zipKey];
-          
+
+           if (!cityNode.vettedDarkSites) {
+               continue;
+           }
+
            for (let i = 0; i < cityNode.vettedDarkSites.length; i++) {
                const site = cityNode.vettedDarkSites[i];
-              
-               const distanceMiles = calculateHaversineDistance(userLat, userLng, site.latitude, site.longitude);
-              
+
+               const distanceMiles = calculateHaversineDistance(
+                   userLat,
+                   userLng,
+                   site.latitude,
+                   site.longitude
+               );
+
                if (distanceMiles <= maxRadius) {
                    site.computedDistance = distanceMiles;
                    eligibleSites.push(site);
@@ -111,52 +132,78 @@ async function processGeospatialData() {
 
        // STEP 4: SORT ARRAY FILTER
        eligibleSites.sort((a, b) => a.bortleScore - b.bortleScore);
-      
+
        const optimalSite = eligibleSites[0];
-      
+
        console.log(`Best match: ${optimalSite.siteName} located ${optimalSite.computedDistance.toFixed(1)} miles away.`);
 
        // SATELLITE WEATHER INTEGRATION
        const resultsPanel = document.getElementById('results-panel');
        const resultsContent = document.getElementById('results-content');
-       
+
        if (resultsPanel && resultsContent) {
            resultsPanel.style.display = "block";
-           resultsContent.innerHTML = "Fetching meteorological satellite arrays... Compiling atmospheric matrices...";
-           
-           const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${optimalSite.latitude}&longitude=${optimalSite.longitude}&current_weather=true&hourly=cloudcover`;
-           const weatherResponse = await fetch(weatherUrl);
-           const weatherData = await weatherResponse.json();
-           
-           const currentCloudCover = weatherData.hourly.cloudcover[0];
-           const liveWind = weatherData.current_weather.windspeed;
-           
-           let visibilityStatus = "";
-           if (currentCloudCover < 20) {
-               visibilityStatus = "Clear skies, perfect stargazing conditions.";
-           } else if (currentCloudCover < 60) {
-               visibilityStatus = "Partially cloudy, stars should be mostly visible.";
-           } else {
-               visibilityStatus = "Very cloudy, may not be able to see stars.";
+           resultsContent.innerHTML = "Fetching current weather...";
+
+           try {
+               const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${optimalSite.latitude}&longitude=${optimalSite.longitude}&current=cloud_cover,wind_speed_10m`;
+
+               const weatherResponse = await fetch(weatherUrl);
+
+               if (!weatherResponse.ok) {
+                   throw new Error(`Weather request failed: ${weatherResponse.status}`);
+               }
+
+               const weatherData = await weatherResponse.json();
+
+               if (!weatherData.current ||
+                   weatherData.current.cloud_cover == null ||
+                   weatherData.current.wind_speed_10m == null) {
+                   throw new Error("Current weather data is unavailable.");
+               }
+
+               const currentCloudCover = weatherData.current.cloud_cover;
+               const liveWind = weatherData.current.wind_speed_10m;
+
+               let visibilityStatus = "";
+
+               if (currentCloudCover < 20) {
+                   visibilityStatus = "Clear skies, perfect stargazing conditions.";
+               } else if (currentCloudCover < 60) {
+                   visibilityStatus = "Partially cloudy, stars should be mostly visible.";
+               } else {
+                   visibilityStatus = "Very cloudy, may not be able to see stars.";
+               }
+
+               resultsContent.innerHTML = `
+                   <b>Absolute Darkest Target Found:</b> ${optimalSite.siteName}<br>
+                   <b>Distance Vector:</b> ${optimalSite.computedDistance.toFixed(1)} Miles away from your location.<br>
+                   <b>Light Pollution Index:</b> Bortle Class ${optimalSite.bortleScore}<br>
+                   <b>Civic STEM Access:</b> ${optimalSite.isDarkSkyClassroom ? "Vetted Dark-Sky Classroom" : "General Park Area"}<br>
+                   <b>Live Atmospheric Cloud Cover:</b> ${currentCloudCover}% (${visibilityStatus})<br>
+                   <b>Current Surface Windspeed:</b> ${liveWind} km/h<br>
+                   <b>Critical Ecological Profile:</b> ${optimalSite.ecoSystemNotes}
+               `;
+           } catch (weatherError) {
+               console.error("Weather error:", weatherError);
+
+               resultsContent.innerHTML = `
+                   <b>Dark-Sky Target Found:</b> ${optimalSite.siteName}<br>
+                   <b>Distance:</b> ${optimalSite.computedDistance.toFixed(1)} miles<br>
+                   <b>Light Pollution Index:</b> Bortle Class ${optimalSite.bortleScore}<br>
+                   <b>Weather:</b> Weather data is temporarily unavailable. Please try again.
+               `;
            }
-           
-           resultsContent.innerHTML = `
-               <b>Absolute Darkest Target Found:</b> ${optimalSite.siteName}<br>
-               <b>Distance Vector:</b> ${optimalSite.computedDistance.toFixed(1)} Miles away from your location.<br>
-               <b>Light Pollution Index:</b> Bortle Class ${optimalSite.bortleScore}<br>
-               <b>Civic STEM Access:</b> ${optimalSite.isDarkSkyClassroom ? "Vetted Dark-Sky Classroom" : "General Park Area"}<br>
-               <b>Live Atmospheric Cloud Cover:</b> ${currentCloudCover}% (${visibilityStatus})<br>
-               <b>Current Surface Windspeed:</b> ${liveWind} km/h<br>
-               <b>Critical Ecological Profile:</b> ${optimalSite.ecoSystemNotes}
-           `;
+       } else {
+           console.error('Weather results could not be displayed. Check that results-panel and results-content exist in your HTML.');
        }
 
        // STEP 5: RENDERING OPTIMIZED COORDINATE FLAGS
        eligibleSites.forEach(site => {
            const isOptimal = (site.siteName === optimalSite.siteName);
-          
+
            const circleColor = isOptimal ? '#b231e1' : '#9a919a';
-          
+
            const siteMarker = L.circleMarker([site.latitude, site.longitude], {
                radius: isOptimal ? 12 : 8,
                fillColor: circleColor,
@@ -171,15 +218,15 @@ async function processGeospatialData() {
                <b>Distance:</b> ${site.computedDistance.toFixed(1)} Miles away.<br>
                <b>Eco Report:</b> ${site.ecoSystemNotes}
            `);
-          
+
            if (isOptimal) {
                siteMarker.openPopup();
            }
        });
 
    } catch (error) {
-       console.error("error", error);
-       alert("Calculation error. Unable to process data.");
+       console.error("Calculation error:", error);
+       alert("Calculation error: " + error.message);
    }
 }
 
@@ -189,15 +236,15 @@ async function processGeospatialData() {
 */
 function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
    const earthRadiusMiles = 3958.8;
-  
+
    const dLat = (lat2 - lat1) * Math.PI / 180;
    const dLon = (lon2 - lon1) * Math.PI / 180;
-  
+
    const a =
        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      
+
    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
    return earthRadiusMiles * c;
 }

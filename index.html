@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,17 +9,15 @@
       <!-- Leaflet map layout -->
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-
       <style>
       /* spacey fun styling */
-          body{
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          margin: 0;
-          padding: 0;
-          background-color: #0b0f19;
-          color: #ffffff
+          body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              margin: 0;
+              padding: 0;
+              background-color: #0b0f19;
+              color: #ffffff;
           }
-
 
           /* Navigation bar for all pages */
           nav {
@@ -30,13 +29,11 @@
               border-bottom: 2px solid #1f2937;
           }
 
-
           .nav-logo {
               font-size: 1.2rem;
               font-weight: bold;
               color: #8104ae;
           }
-
 
           .nav-links button {
               background: none;
@@ -48,21 +45,32 @@
               transition: color 0.2s ease;
           }
 
-
           /* spruce things up a little */
           .nav-links button:hover {
               color: #8104ae;
           }
+
           .hidden-page {
               display: none;
           }
-          .page-container{
-             padding: 40px;
-             max-width: 1200px;
-             margin: 0 auto;
+
+          .page-container {
+              padding: 40px;
+              max-width: 1200px;
+              margin: 0 auto;
+          }
+
+          .report-box {
+              background-color: #111827;
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid #1f2937;
+              margin-bottom: 25px;
+              display: none;
           }
       </style>
   </head>
+
   <body>
      
       <!-- consistent navigation bar -->
@@ -75,13 +83,11 @@
           </div>
       </nav>
 
-
       <!-- home page -->
       <div id="home-page" class="page-container">
           <h1>Welcome to Delaware Dark Sky!</h1>
           <p>Appreciate our dark skies and help raise awareness for preventing light pollution in our communities.</p>
       </div>
-
 
       <!-- light pollution map page -->
       <div id="map-page" class="page-container hidden-page">
@@ -98,7 +104,6 @@
                       <input type="text" id="user-address" placeholder="e.g., 123 Main St, Lewes, DE" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #374151; background-color: #1f2937; color: #ffffff; box-sizing: border-box;">
                   </div>
 
-
                   <!-- Restricting search to specific radius -->
                   <div style="flex: 1; min-width: 150px;">
                       <label for="travel-radius" style="display: block; margin-bottom: 8px; font-weight: bold; color: #9ca3af;">Max Travel Radius:</label>
@@ -110,7 +115,6 @@
                       </select>
                   </div>
 
-
                   <!-- calculation button -->
                   <div style="display: flex; align-items: flex-end;">
                       <button onclick="processGeospatialData()" style="background-color: #8104ae; color: #0b0f19; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: background-color 0.2s ease;">
@@ -118,22 +122,18 @@
                       </button>
                   </div>
 
-
               </div>
           </div>
 
-
-          <!-- logging box panel for weather parsing arrays -->
-          <div id="results-panel" style="background-color: #111827; padding: 20px; border-radius: 8px; border: 1px solid #1f2937; margin-bottom: 25px; display: none;">
-              <h3 style="color: #8104ae; margin-top: 0; margin-bottom: 10px;"> Engine Optimization Report</h3>
+          <!-- Real-time metrics output logging box panel -->
+          <div id="results-panel" class="report-box">
+              <h3 style="color: #8104ae; margin-top: 0; margin-bottom: 10px;">Engine Optimization Report</h3>
               <div id="results-content" style="line-height: 1.6; font-size: 0.95rem; color: #e5e7eb;"></div>
           </div>
-
 
           <!-- Leaflet map rendering yay -->
           <div id="map" style="height: 500px; width: 100%; border-radius: 8px; border: 2px solid #1f2937;"></div>
       </div>
-
 
       <!-- light pollution and educational awareness page -->
       <div id="edu-page" class="page-container hidden-page">
@@ -141,10 +141,9 @@
           <p>Eco impact and educational equality metrics will load inside this portal view tier.</p>
       </div>
 
-
       <!-- Leaflet map engine library -->
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
      
-             <script src="script.js"></script>
+      <script src="script.js"></script>
   </body>
 </html>
