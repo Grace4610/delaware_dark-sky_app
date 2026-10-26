@@ -36,7 +36,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
    maxZoom: 19
 }).addTo(map);
 // Overlay a pre-existing satellite light pollution color ramp on top of our map
-L.tileLayer('https://waqi.info{z}/{x}/{y}.png', {
+L.tileLayer('https://waqi.info/{z}/{x}/{y}.png', {
    attribution: 'Satellite Data &copy; WAQI',
    opacity: 0.5 // Makes the layer semi-transparent so you can still read the street names!
 }).addTo(map);
@@ -74,8 +74,8 @@ async function processGeospatialData() {
         }
 
         // Extract the user's home coordinate float tokens out of index zero of the data array
-        const userLat = parseFloat(data.lat);
-        const userLng = parseFloat(data.lon);
+        const userLat = parseFloat(data[0].lat);
+        const userLng = parseFloat(data[0].lon);
 
         // center map over users location
         map.setView([userLat, userLng], 11);
