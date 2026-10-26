@@ -67,11 +67,11 @@
   <body>
      
       <!-- consistent navigation bar -->
-      <nav>
+        <nav>
           <div class="nav-logo" style="display: flex; align-items: center; gap: 12px;">
-          <span>Delaware Dark Sky</span>
-          <img src="logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: contain; border-radius: 4px;">
-          </nav>
+              <span>Delaware Dark Sky</span>
+              <img src="logo.png" alt="Logo" style="height: 32px; width: 32px; object-fit: cover; border-radius: 50%;">
+          </div>
           <div class="nav-links">
               <button onclick="switchPage('home-page')">Home</button>
               <button onclick="switchPage('map-page')">Map</button>
@@ -84,26 +84,36 @@
       <div id="home-page" class="page-container">
          <div style="text-align: center; margin-bottom: 40px; padding: 30px; background-color: #111827; border-radius: 8px; border: 1px solid #1f2937;">
               <h1 style="margin-top: 0; color: #8104ae;">Welcome to Delaware Dark Sky</h1>
-              <p style="color: #9ca3af; max-width: 800px; margin: 0 auto; line-height: 1.6;">
-                  An interactive civic technology platform engineered to track light pollution footprints, optimize observation routes, and advocate for dark-sky preservation across Delaware communities.
-              </p>
+              <p style="color: #9ca3af; max-width: 800px; margin: 0 auto; line-height: 1.6;"> A platform designed to track light polution across the state, 
+                provide users with the best locations for stargazing in their area, and advocate for dark sky preservation across Delaware.
+                
+            </p>
+          </div>
+
+            <!-- Centered large homepage brand anchor image -->
+          <div style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+              <img src="logo.png" alt="Delaware Dark Sky Brand Mark" style="height: 120px; width: 120px; object-fit: cover; border: 2px solid #8104ae; box-shadow: 0 0 15px rgba(129, 4, 174, 0.4);">
           </div>
 
           <div style="display: flex; flex-wrap: wrap; gap: 30px;">
               <!-- Platform Purpose Card Layout -->
               <div style="flex: 1; min-width: 300px; background-color: #111827; padding: 25px; border-radius: 8px; border: 1px solid #1f2937;">
-                  <h3 style="color: #8104ae; margin-top: 0;">What This App Does</h3>
+                  <h3 style="color: #8104ae; margin-top: 0;">What Does This App Do?</h3>
                   <p style="line-height: 1.6; color: #e5e7eb; font-size: 0.95rem;">
-                      This application converts complex spatial coordination files into a simplified interface. By entering your location parameters, the engine automatically calculates coordinates, sorts regional public lands, and isolates the darkest observational locations within your chosen travel boundaries.
-                  </p>
+                      This app takes any Delaware address or ZIP code entered by the user and converts it into a specific coordinate point. The program then takes the 
+                      travel radius entered by the user and finds all safely available stargazing locations within that area, providing information for all of them and, 
+                      highlights the best option based on it's Bortle Darkness Score. Click the Map tab to try it out yourself!
+                      </p>
               </div>
 
               <!-- Inspiration Card Layout -->
               <div style="flex: 1; min-width: 300px; background-color: #111827; padding: 25px; border-radius: 8px; border: 1px solid #1f2937;">
-                  <h3 style="color: #8104ae; margin-top: 0;">Our Inspiration</h3>
-                  <p style="line-height: 1.6; color: #e5e7eb; font-size: 0.95rem;">
-                      Living along Delaware's expanding coastal and suburban regions makes artificial skyglow highly visible. This project was directly inspired by the need to protect our natural overhead environments, ensure urban school groups retain access to observational astronomy, and protect sensitive nocturnal ecosystems.
-                  </p>
+                  <h3 style="color: #8104ae; margin-top: 0;">My Inspiration</h3>
+                  <p style="line-height: 1.6; color: #e5e7eb; font-size: 0.95rem;"> As someone who was born and raised in Delaware, i've encountered first hand the 
+                    effects of light polltion brought on by rapid urbanization. While there isn't much that can be done to limit urbanization, I still want everyone to have
+                    access the night skies I adore, and raise awarness about the effects light pollution has on our enviornment and communities, more about this can be found in the light pollution tab.
+                      
+                </p>
               </div>
           </div>
 
@@ -121,7 +131,7 @@
                  
                   <!-- Text box capturing origin addresses or ZIP codes -->
                   <div style="flex: 2; min-width: 250px;">
-                      <label for="user-address" style="display: block; margin-bottom: 8px; font-weight: bold; color: #9ca3af;">Origin Address or ZIP Code:</label>
+                      <label for="user-address" style="display: block; margin-bottom: 8px; font-weight: bold; color: #9ca3af;">Address or ZIP Code:</label>
                       <input type="text" id="user-address" placeholder="e.g., 123 Main St, Lewes, DE" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #374151; background-color: #1f2937; color: #ffffff; box-sizing: border-box;">
                   </div>
 
@@ -141,7 +151,7 @@
                   <!-- calculation button -->
                   <div style="display: flex; align-items: flex-end;">
                       <button onclick="processGeospatialData()" style="background-color: #8104ae; color: #0b0f19; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: background-color 0.2s ease;">
-                          Analyze Coordinates
+                          Find Best Locations
                       </button>
                   </div>
 
