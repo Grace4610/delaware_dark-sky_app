@@ -55,8 +55,12 @@ async function processGeospatialData() {
 
     try {
         // STEP 1: ASYNCHRONOUS NETWORK GEOLOCATION FETCH
-        const geocodeUrl = `https://openstreetmap.org{encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
-        const response = await fetch(geocodeUrl);
+        const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressInput + ", Delaware")}&limit=1`;
+        const response = await fetch(geocodeUrl, {
+            headers: {
+                'User-Agent': 'DelawareDarkSkyPlatform/1.0 (grace4610@github.io; educational student project)'
+            }
+        });
         const data = await response.json();
 
         if (data.length === 0) {
